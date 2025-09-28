@@ -1,0 +1,29 @@
+# Ignore InteliJ data
+.idea/
+
+# Ignore Terraform provider and module installations
+**/.terraform/
+
+# Ignore local state files
+**/*.tfstate
+**/*.tfstate.*
+
+# Ignore Terraform crash log files
+crash.log
+crash.*.log
+
+# Ignore secret variable files
+**/*.tfvars
+**/*.tfvars.json
+
+# Ignore saved plan files
+*.tfplan*
+
+# Ignore Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore the lock file
+# NOTE: It is a best practice to commit the lock file for consistency
+# in team environments, so you might choose to remove this line.
+.terraform.lock.hcl
