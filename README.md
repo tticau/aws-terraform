@@ -1,174 +1,197 @@
+# 📅 Month 1 – AWS Core Foundations (Free-First)
 
-## 📅 Month 1 – AWS Core Foundations
+### Week 1 – IAM & S3 Basics
 
-### **Week 1 – IAM & Basics**
-
-**Explanation:**
+**Explanation**
 
 * IAM: users, groups, roles, policies, MFA, least privilege.
 * Shared responsibility model.
+* S3 basics: bucket policies vs IAM policies.
 
-**Labs:**
+**Labs**
 
-* Create an IAM user with programmatic access.
-* Create a custom IAM policy and attach to role.
-* Configure AWS CLI with that IAM user.
-
----
-
-### **Week 2 – VPC & Networking**
-
-**Explanation:**
-
-* VPC, subnets, route tables, internet gateway, NAT gateway, security groups, NACLs.
-
-**Labs:**
-
-* Create a VPC with public + private subnet.
-* Deploy EC2 in private subnet, connect via bastion host in public subnet.
+* Create an S3 bucket.
+* Create IAM user with programmatic access and attach `AmazonS3ReadOnlyAccess`.
+* Test with CLI (read works, write fails).
+* Create custom policy allowing `s3:*` only on your bucket and attach to user.
 
 ---
 
-### **Week 3 – Compute & Storage**
+### Week 2 – VPC & Networking (no EC2)
 
-**Explanation:**
+**Explanation**
 
-* EC2 basics (AMI, instance types, key pairs, security groups).
-* Storage: S3, EBS basics.
+* VPC, subnets, route tables, internet gateway (free).
+* Difference between public/private subnets.
+* Gateway VPC Endpoint for S3 (free).
 
-**Labs:**
+**Labs**
 
-* Launch EC2, SSH into it, install Nginx.
-* Upload files to S3, configure bucket policy for public read.
-* Attach & format EBS volume to EC2.
-
----
-
-### **Week 4 – Monitoring & Logging**
-
-**Explanation:**
-
-* CloudWatch (logs, metrics, alarms).
-* CloudTrail (auditing API calls).
-
-**Labs:**
-
-* Create CloudWatch alarm to monitor EC2 CPU.
-* Send custom logs from EC2 to CloudWatch.
-* Enable CloudTrail and view user actions.
+* Create a VPC with one public + one private subnet.
+* Attach Internet Gateway.
+* Create VPC Gateway Endpoint for S3.
+* Validate via CLI: check routes, describe subnets, and use CLI to access S3 from “private” subnet (conceptual exercise without EC2).
 
 ---
 
-## 📅 Month 2 – AWS for Containers & Ops
+### Week 3 – Storage Deep Dive
 
-### **Week 5 – Container Registry & DNS**
+**Explanation**
 
-**Explanation:**
+* S3 versioning, lifecycle rules, encryption.
+* EBS (theory only to avoid cost).
 
-* ECR basics.
-* Route53 basics (DNS zones, records).
+**Labs**
 
-**Labs:**
-
-* Push Docker image to ECR.
-* Configure Route53 to point domain → EC2 app.
-
----
-
-### **Week 6 – Load Balancing & Scaling**
-
-**Explanation:**
-
-* Elastic Load Balancers (ALB vs NLB).
-* Auto Scaling Groups.
-
-**Labs:**
-
-* Deploy app on two EC2s, load balance with ALB.
-* Configure ASG with scaling policy.
+* Enable versioning and encryption on S3 bucket.
+* Upload a file, delete it, restore from versioning.
+* Create lifecycle rule (auto-expire objects after 30 days).
+* Generate pre-signed URL to share private file.
 
 ---
 
-### **Week 7 – Kubernetes on AWS**
+### Week 4 – Monitoring & Logging
 
-**Explanation:**
+**Explanation**
 
-* EKS basics: control plane, worker nodes, networking.
+* CloudWatch basics (log groups, metrics).
+* CloudTrail event history (free 90 days).
 
-**Labs:**
+**Labs**
 
-* Deploy EKS cluster using AWS CLI/EKSctl.
-* Deploy sample app with LoadBalancer service.
-
----
-
-### **Week 8 – Security & Secrets**
-
-**Explanation:**
-
-* KMS (encryption).
-* Secrets Manager & SSM Parameter Store.
-
-**Labs:**
-
-* Store DB password in Secrets Manager.
-* Use IAM role to grant EC2 access to retrieve it.
+* Create CloudWatch log group, push a custom event using CLI.
+* Enable bucket logging → deliver logs to another S3 bucket.
+* View CloudTrail event history for IAM and S3 actions.
 
 ---
 
-## 📅 Month 3 – Terraform & Automation
+# 📅 Month 2 – AWS for Security & Ops (Free-First)
 
-### **Week 9 – Terraform Basics**
+### Week 5 – Container Registry & DNS (conceptual + free alternatives)
 
-**Explanation:**
+**Explanation**
+
+* ECR basics (push images).
+* Route53 basics (theory only, since hosted zones are billed).
+
+**Labs**
+
+* Create an ECR repo (pennies if used rarely).
+* Push/pull a small Docker image.
+* (Optional theory) map how Route53 would point DNS → S3 website endpoint (but skip creating hosted zone).
+
+---
+
+### Week 6 – Scaling & Resilience (theory + free)
+
+**Explanation**
+
+* How Auto Scaling works with EC2 (theory).
+* Compare ALB vs NLB (theory).
+* S3 as a “serverless” scalable service.
+
+**Labs**
+
+* Simulate scaling by uploading many files to S3 and checking durability/access.
+* Use S3 static website endpoint to “serve content” without EC2/ALB.
+
+---
+
+### Week 7 – Kubernetes on AWS (conceptual only)
+
+**Explanation**
+
+* EKS architecture: control plane, worker nodes, VPC networking.
+* Why EKS is expensive without free tier.
+
+**Labs**
+
+* **Theory exercise**: design an EKS cluster (subnets, nodes, IAM roles).
+* (Optional cheap test) use `eksctl create cluster --dry-run` to generate manifest, but don’t apply.
+
+---
+
+### Week 8 – Security & Secrets
+
+**Explanation**
+
+* KMS (free keys: first 20,000 requests).
+* SSM Parameter Store (standard tier = free).
+
+**Labs**
+
+* Store DB URL in SSM Parameter Store.
+* Attach IAM policy allowing only `GetParameter` for `/app/dev/*`.
+* Test access with IAM user.
+* Create a KMS CMK, encrypt/decrypt a string with CLI.
+
+---
+
+# 📅 Month 3 – Terraform & Automation (Free-First)
+
+### Week 9 – Terraform Basics
+
+**Explanation**
 
 * Providers, resources, variables, outputs.
-* Terraform workflow: init → plan → apply → destroy.
+* Terraform workflow.
 
-**Labs:**
+**Labs**
 
-* Write Terraform to deploy EC2 + security group.
-* Output instance public IP.
-
----
-
-### **Week 10 – Networking with Terraform**
-
-**Explanation:**
-
-* VPC, subnets, route tables, IGW, SGs in Terraform.
-
-**Labs:**
-
-* Create VPC + 2 subnets (public/private) using Terraform.
-* Deploy EC2 in private subnet with bastion host.
+* Terraform: create S3 bucket + IAM user.
+* Output bucket name and user ARN.
 
 ---
 
-### **Week 11 – Containers with Terraform**
+### Week 10 – Networking with Terraform
 
-**Explanation:**
+**Explanation**
 
-* ECR + EKS via Terraform.
+* Build VPC, subnets, IGW with Terraform.
+* Modules for reusability.
 
-**Labs:**
+**Labs**
 
-* Deploy ECR repo + push image.
-* Deploy EKS cluster via Terraform.
-* Deploy app on EKS using Terraform Helm provider.
+* Terraform: create `vpc-lite` module (VPC, 2 subnets, IGW, S3 endpoint).
+* Output subnet IDs.
 
 ---
 
-### **Week 12 – GitOps & Advanced Terraform**
+### Week 11 – Config & Parameters with Terraform
 
-**Explanation:**
+**Explanation**
 
-* Remote state (S3 + DynamoDB lock).
-* Workspaces for environments.
-* CI/CD integration.
+* Terraform for Parameter Store, KMS.
+* Use variables/outputs for secrets.
 
-**Labs:**
+**Labs**
 
-* Configure remote state backend in S3.
-* Create staging/prod workspaces.
-* Run Terraform plan/apply from GitLab CI pipeline.
+* Terraform: create SSM parameters (`/app/dev/db_url`).
+* Attach IAM policy for read-only access to parameters.
+* Output parameter ARN.
+
+---
+
+### Week 12 – GitOps & Advanced Terraform
+
+**Explanation**
+
+* Remote state with Terraform Cloud (free).
+* Workspaces (dev/stage/prod).
+* CI/CD integration (GitHub Actions free tier).
+
+**Labs**
+
+* Configure Terraform Cloud backend.
+* Create two workspaces with different variables.
+* GitHub Actions: run `terraform fmt`, `plan`, `tfsec`.
+* Scheduled drift detection (`terraform plan` nightly, no apply).
+
+---
+
+✅ **By following this plan, I or you’ll:**
+
+* Learn AWS **fundamentals** without paying for EC2/EKS.
+* Practice **IAM, S3, VPC, CloudTrail, Parameter Store, KMS** (all nearly free).
+* Master Terraform with free-tier friendly infra (S3, IAM, VPC).
+* Get real **GitOps CI/CD** workflows in GitHub.
