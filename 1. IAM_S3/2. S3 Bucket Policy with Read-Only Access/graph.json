@@ -1,0 +1,23 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  "data.aws_iam_policy_document.public_read" [label="data.aws_iam_policy_document.public_read"];
+  "aws_s3_bucket.this" [label="aws_s3_bucket.this"];
+  "aws_s3_bucket_ownership_controls.this" [label="aws_s3_bucket_ownership_controls.this"];
+  "aws_s3_bucket_policy.this" [label="aws_s3_bucket_policy.this"];
+  "aws_s3_bucket_public_access_block.this" [label="aws_s3_bucket_public_access_block.this"];
+  "aws_s3_bucket_website_configuration.this" [label="aws_s3_bucket_website_configuration.this"];
+  "aws_s3_object.error" [label="aws_s3_object.error"];
+  "aws_s3_object.index" [label="aws_s3_object.index"];
+  "random_id.suffix" [label="random_id.suffix"];
+  "data.aws_iam_policy_document.public_read" -> "aws_s3_bucket.this";
+  "aws_s3_bucket.this" -> "random_id.suffix";
+  "aws_s3_bucket_ownership_controls.this" -> "aws_s3_bucket.this";
+  "aws_s3_bucket_policy.this" -> "data.aws_iam_policy_document.public_read";
+  "aws_s3_bucket_policy.this" -> "aws_s3_bucket_ownership_controls.this";
+  "aws_s3_bucket_policy.this" -> "aws_s3_bucket_public_access_block.this";
+  "aws_s3_bucket_public_access_block.this" -> "aws_s3_bucket.this";
+  "aws_s3_bucket_website_configuration.this" -> "aws_s3_bucket.this";
+  "aws_s3_object.error" -> "aws_s3_bucket.this";
+  "aws_s3_object.index" -> "aws_s3_bucket.this";
+}
